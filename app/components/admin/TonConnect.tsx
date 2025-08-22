@@ -1,13 +1,13 @@
 'use client'
 
-import { useTonConnect } from '@tonconnect/ui-react'
+import { useTonConnectUI } from '@tonconnect/ui-react'
 
 interface TonConnectProps {
   onClose: () => void
 }
 
 export function TonConnect({ onClose }: TonConnectProps) {
-  const { connected, account, connect, disconnect } = useTonConnect()
+  const { connected, account, connect, disconnect } = useTonConnectUI()
 
   const handleConnect = () => {
     connect()
