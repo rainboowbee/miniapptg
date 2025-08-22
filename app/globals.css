@@ -5,13 +5,27 @@
 /* Импорт шрифта Doto */
 @import url('https://fonts.googleapis.com/css2?family=Doto:wght@400;500;600;700&display=swap');
 
+/* Fallback для шрифта Doto */
+@font-face {
+  font-family: 'Doto';
+  src: url('https://fonts.gstatic.com/s/doto/v1/doto-regular.woff2') format('woff2'),
+       url('https://fonts.gstatic.com/s/doto/v1/doto-regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 @layer base {
+  :root {
+    --font-doto: 'Doto', system-ui, sans-serif;
+  }
+  
   html {
-    font-family: system-ui, sans-serif;
+    font-family: var(--font-doto);
   }
   
   body {
-    @apply bg-black text-white overflow-x-hidden;
+    @apply bg-black text-white overflow-x-hidden font-doto;
   }
 }
 

@@ -6,16 +6,16 @@ export function ComingSoon() {
       {/* Стикер по центру */}
       <div className="mb-8">
         <img 
-          src="/sticker.svg" 
+          src="AnimatedSticker.tgs" 
           alt="Coming Soon" 
           className="w-32 h-32 md:w-40 md:h-40"
         />
       </div>
       
-      {/* Текст Coming Soon */}
-      <h1 className="text-4xl md:text-6xl font-bold text-white font-doto">
-        Coming Soon
-      </h1>
+                   {/* Текст Coming Soon */}
+             <h1 className="text-4xl md:text-6xl font-bold text-white font-doto" style={{ fontFamily: 'Doto, system-ui, sans-serif' }}>
+               Coming Soon
+             </h1>
     </div>
   )
 }
