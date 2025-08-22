@@ -3,6 +3,7 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { TonConnectUIProvider } from '@tonconnect/ui-react'
 import { useState } from 'react'
+import { getTonConnectManifestUrl } from '@/lib/tonconnect'
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(() => new QueryClient({
@@ -15,7 +16,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
   }))
 
   return (
-    <TonConnectUIProvider manifestUrl="/tonconnect-manifest.json">
+    <TonConnectUIProvider manifestUrl={getTonConnectManifestUrl()}>
       <QueryClientProvider client={queryClient}>
         {children}
       </QueryClientProvider>

@@ -1,7 +1,7 @@
 {
-  "url": "http://localhost:3000",
+  "url": "https://miniapptg-bay.vercel.app",
   "name": "Telegram Mini App",
-  "iconUrl": "http://localhost:3000/sticker.svg",
-  "termsOfUseUrl": "http://localhost:3000/terms",
-  "privacyPolicyUrl": "http://localhost:3000/privacy"
+  "iconUrl": "https://miniapptg-bay.vercel.app/sticker.svg",
+  "termsOfUseUrl": "https://miniapptg-bay.vercel.app/terms",
+  "privacyPolicyUrl": "https://miniapptg-bay.vercel.app/privacy"
 }

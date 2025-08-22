@@ -9,12 +9,21 @@ interface TonConnectProps {
 export function TonConnect({ onClose }: TonConnectProps) {
   const [tonConnectUI] = useTonConnectUI()
 
-  const handleConnect = () => {
-    tonConnectUI.connectWallet()
+  const handleConnect = async () => {
+    try {
+      await tonConnectUI.connectWallet()
+    } catch (error) {
+      console.error('Ошибка подключения TON кошелька:', error)
+      // Можно добавить уведомление пользователю об ошибке
+    }
   }
 
-  const handleDisconnect = () => {
-    tonConnectUI.disconnect()
+  const handleDisconnect = async () => {
+    try {
+      await tonConnectUI.disconnect()
+    } catch (error) {
+      console.error('Ошибка отключения TON кошелька:', error)
+    }
   }
 
   return (
