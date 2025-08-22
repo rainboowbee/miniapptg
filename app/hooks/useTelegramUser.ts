@@ -25,6 +25,7 @@ interface User {
 
 export function useTelegramUser() {
   const [telegramUser, setTelegramUser] = useState<TelegramUserData | null>(null)
+  const [isCheckingAccess, setIsCheckingAccess] = useState(true)
   const queryClient = useQueryClient()
 
   // Инициализируем Telegram Web App при загрузке
@@ -41,6 +42,9 @@ export function useTelegramUser() {
         avatar: user.photo_url,
       })
     }
+    
+    // Завершаем проверку доступа
+    setTimeout(() => setIsCheckingAccess(false), 1000)
   }, [])
 
   // Получаем пользователя из БД
@@ -90,6 +94,9 @@ export function useTelegramUser() {
     }
   }, [telegramUser, user, isLoading, createOrUpdateUser])
 
+  // Проверяем, имеет ли пользователь доступ к профилю
+  const hasProfileAccess = telegramUser?.telegramId === '1171820656'
+
   return {
     telegramUser,
     user,
@@ -97,5 +104,7 @@ export function useTelegramUser() {
     error,
     createOrUpdateUser,
     isTelegramAvailable: !!telegramUser,
+    isCheckingAccess,
+    hasProfileAccess,
   }
 }
