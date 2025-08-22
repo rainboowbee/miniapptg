@@ -38,10 +38,18 @@ export function useTonWallet() {
   // Мутация для сохранения данных кошелька
   const saveWalletMutation = useMutation({
     mutationFn: async (walletData: { address: string; publicKey: string }) => {
+      // Получаем telegramId из Telegram Web App
+      const telegramUser = window.Telegram?.WebApp?.initDataUnsafe?.user
+      const telegramId = telegramUser?.id.toString()
+      
+      if (!telegramId) {
+        throw new Error('Telegram ID not found for saving wallet data.')
+      }
+      
       const response = await fetch('/api/user/wallet', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(walletData),
+        body: JSON.stringify({ ...walletData, telegramId }),
       })
       return response.json()
     },

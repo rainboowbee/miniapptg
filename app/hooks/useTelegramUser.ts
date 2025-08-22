@@ -28,7 +28,7 @@ export function useTelegramUser() {
   const [telegramUser, setTelegramUser] = useState<TelegramUserData | null>(null)
   const [isCheckingAccess, setIsCheckingAccess] = useState(true)
   const queryClient = useQueryClient()
-  const { account: walletAccount, isConnected: isWalletConnected } = useTonWallet()
+  const { account: walletAccount, isConnected: isWalletConnected, balance } = useTonWallet()
 
   // Инициализируем Telegram Web App при загрузке
   useEffect(() => {
@@ -110,5 +110,6 @@ export function useTelegramUser() {
     hasProfileAccess,
     isWalletConnected,
     walletAccount,
+    balance,
   }
 }
