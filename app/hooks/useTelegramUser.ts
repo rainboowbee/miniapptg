@@ -88,16 +88,22 @@ export function useTelegramUser() {
     },
     onSuccess: () => {
       // Обновляем кеш после успешного создания/обновления
-      queryClient.invalidateQueries({ queryKey: ['user', telegramUser?.telegramId] })
+      // Используем setQueryData вместо invalidateQueries для избежания бесконечного цикла
+      if (telegramUser?.telegramId) {
+        queryClient.setQueryData(['user', telegramUser.telegramId], (oldData: any) => ({
+          ...oldData,
+          updatedAt: new Date().toISOString()
+        }))
+      }
     },
   })
 
   // Автоматически создаем/обновляем пользователя при получении данных из Telegram
   useEffect(() => {
-    if (telegramUser && !user && !isLoading) {
+    if (telegramUser && !user && !isLoading && !createOrUpdateUser.isPending) {
       createOrUpdateUser.mutate(telegramUser)
     }
-  }, [telegramUser, user, isLoading, createOrUpdateUser])
+  }, [telegramUser, user, isLoading, createOrUpdateUser.isPending])
 
   // Проверяем, имеет ли пользователь доступ к профилю (админ)
   const hasProfileAccess = telegramUser?.telegramId === '1171820656'

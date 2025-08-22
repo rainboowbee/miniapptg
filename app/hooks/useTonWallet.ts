@@ -79,7 +79,7 @@ export function useTonWallet() {
 
   // Автоматическое сохранение данных кошелька при подключении
   useEffect(() => {
-    if (tonConnectUI.account?.address && tonConnectUI.account?.publicKey) {
+    if (tonConnectUI.account?.address && tonConnectUI.account?.publicKey && !saveWalletMutation.isPending) {
       const newWalletData = {
         address: tonConnectUI.account.address,
         publicKey: tonConnectUI.account.publicKey,
@@ -88,13 +88,15 @@ export function useTonWallet() {
       
       setWalletData(newWalletData)
       
-      // Сохраняем в базу данных
-      saveWalletMutation.mutate({
-        address: newWalletData.address,
-        publicKey: newWalletData.publicKey,
-      })
+      // Сохраняем в базу данных только если еще не сохраняли
+      if (!walletData || walletData.address !== newWalletData.address) {
+        saveWalletMutation.mutate({
+          address: newWalletData.address,
+          publicKey: newWalletData.publicKey,
+        })
+      }
     }
-  }, [tonConnectUI.account, balance])
+  }, [tonConnectUI.account, balance, saveWalletMutation.isPending, walletData])
 
   return {
     account: tonConnectUI.account,
