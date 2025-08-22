@@ -26,10 +26,12 @@
                 radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.8), transparent),
                 radial-gradient(1px 1px at 90px 40px, #fff, transparent),
                 radial-gradient(1px 1px at 130px 80px, rgba(255,255,255,0.6), transparent),
-                radial-gradient(2px 2px at 160px 30px, #ddd, transparent);
+                radial-gradient(2px 2px at 160px 30px, #ddd, transparent),
+                radial-gradient(1px 1px at 200px 60px, rgba(255,255,255,0.4), transparent),
+                radial-gradient(1px 1px at 250px 90px, #ccc, transparent);
     background-repeat: repeat;
     background-size: 200px 200px;
-    animation: stars 20s linear infinite;
+    animation: stars1 20s linear infinite;
   }
 
   .stars-bg::before {
@@ -42,10 +44,12 @@
     background: radial-gradient(1px 1px at 50px 100px, rgba(255,255,255,0.8), transparent),
                 radial-gradient(1px 1px at 120px 150px, #fff, transparent),
                 radial-gradient(2px 2px at 180px 50px, rgba(255,255,255,0.6), transparent),
-                radial-gradient(1px 1px at 220px 120px, #ddd, transparent);
+                radial-gradient(1px 1px at 220px 120px, #ddd, transparent),
+                radial-gradient(1px 1px at 280px 180px, rgba(255,255,255,0.5), transparent),
+                radial-gradient(1px 1px at 320px 220px, #eee, transparent);
     background-repeat: repeat;
     background-size: 300px 300px;
-    animation: stars 15s linear infinite reverse;
+    animation: stars2 15s linear infinite;
   }
 
   .stars-bg::after {
@@ -57,20 +61,58 @@
     bottom: 0;
     background: radial-gradient(1px 1px at 80px 200px, rgba(255,255,255,0.7), transparent),
                 radial-gradient(1px 1px at 150px 250px, #fff, transparent),
-                radial-gradient(2px 2px at 200px 100px, rgba(255,255,255,0.5), transparent);
+                radial-gradient(2px 2px at 200px 100px, rgba(255,255,255,0.5), transparent),
+                radial-gradient(1px 1px at 350px 150px, rgba(255,255,255,0.6), transparent),
+                radial-gradient(1px 1px at 400px 280px, #ddd, transparent);
     background-repeat: repeat;
     background-size: 250px 250px;
-    animation: stars 25s linear infinite;
+    animation: stars3 25s linear infinite;
   }
 }
 
-@keyframes stars {
+@keyframes stars1 {
   0% {
-    transform: translateY(0px);
+    background-position: 0 0;
   }
   100% {
-    transform: translateY(-200px);
+    background-position: 0 -200px;
   }
+}
+
+@keyframes stars2 {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 0 -300px;
+  }
+}
+
+@keyframes stars3 {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 0 -250px;
+  }
+}
+
+/* Дополнительные эффекты для космического фона */
+@keyframes twinkle {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+}
+
+.stars-bg .twinkle {
+  animation: twinkle 3s ease-in-out infinite;
+}
+
+.stars-bg .twinkle:nth-child(2) {
+  animation-delay: 1s;
+}
+
+.stars-bg .twinkle:nth-child(3) {
+  animation-delay: 2s;
 }
 
 @keyframes fadeIn {

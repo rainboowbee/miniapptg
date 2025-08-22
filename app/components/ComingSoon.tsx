@@ -3,7 +3,7 @@
 export function ComingSoon() {
   return (
     <div className="min-h-screen relative stars-bg flex items-center justify-center">
-      <div className="text-center z-10 max-w-md mx-auto px-6">
+      <div className="text-center relative z-20 max-w-md mx-auto px-6">
         <div className="mb-8 animate-fade-in">
           {/* Стикер по центру */}
           <div className="w-32 h-32 mx-auto mb-6">

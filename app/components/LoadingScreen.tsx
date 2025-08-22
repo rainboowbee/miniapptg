@@ -3,7 +3,7 @@
 export function LoadingScreen() {
   return (
     <div className="min-h-screen relative stars-bg flex items-center justify-center">
-      <div className="text-center z-10">
+      <div className="text-center relative z-20">
         <div className="animate-pulse mb-6">
           <div className="w-20 h-20 mx-auto bg-telegram-500 rounded-full flex items-center justify-center">
             <svg className="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 20 20">

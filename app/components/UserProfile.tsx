@@ -9,7 +9,7 @@ export function UserProfile() {
   if (!isTelegramAvailable) {
     return (
       <div className="min-h-screen relative stars-bg flex items-center justify-center">
-        <div className="text-center z-10 p-8">
+        <div className="text-center relative z-20 p-8">
           <div className="w-16 h-16 mx-auto mb-4 bg-red-500/20 rounded-full flex items-center justify-center border border-red-500/30">
             <svg className="w-8 h-8 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
@@ -29,7 +29,7 @@ export function UserProfile() {
   if (isLoading) {
     return (
       <div className="min-h-screen relative stars-bg flex items-center justify-center">
-        <div className="text-center z-10">
+        <div className="text-center relative z-20">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-telegram-500 mx-auto mb-4"></div>
           <p className="text-gray-300">Загрузка профиля...</p>
         </div>
@@ -40,7 +40,7 @@ export function UserProfile() {
   if (error) {
     return (
       <div className="min-h-screen relative stars-bg flex items-center justify-center">
-        <div className="text-center z-10 p-8">
+        <div className="text-center relative z-20 p-8">
           <div className="w-16 h-16 mx-auto mb-4 bg-red-500/20 rounded-full flex items-center justify-center border border-red-500/30">
             <svg className="w-8 h-8 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
@@ -60,7 +60,7 @@ export function UserProfile() {
   if (!user) {
     return (
       <div className="min-h-screen relative stars-bg flex items-center justify-center">
-        <div className="text-center z-10">
+        <div className="text-center relative z-20">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-telegram-500 mx-auto mb-4"></div>
           <p className="text-gray-300">Создание профиля...</p>
         </div>
@@ -70,7 +70,7 @@ export function UserProfile() {
 
   return (
     <div className="min-h-screen relative stars-bg p-4">
-      <div className="max-w-md mx-auto pt-8 relative z-10">
+      <div className="max-w-md mx-auto pt-8 relative z-20">
         {/* Заголовок */}
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-white mb-2 animate-fade-in">
