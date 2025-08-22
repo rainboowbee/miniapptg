@@ -94,7 +94,7 @@ export function useTelegramUser() {
     }
   }, [telegramUser, user, isLoading, createOrUpdateUser])
 
-  // Проверяем, имеет ли пользователь доступ к профилю
+  // Проверяем, имеет ли пользователь доступ к профилю (админ)
   const hasProfileAccess = telegramUser?.telegramId === '1171820656'
 
   return {

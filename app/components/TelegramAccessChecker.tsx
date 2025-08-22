@@ -4,6 +4,7 @@ import { useTelegramUser } from '@/app/hooks/useTelegramUser'
 import { LoadingScreen } from './LoadingScreen'
 import { UserProfile } from './UserProfile'
 import { ComingSoon } from './ComingSoon'
+import { AdminPanel } from './AdminPanel'
 
 export function TelegramAccessChecker() {
   const { 
@@ -40,9 +41,9 @@ export function TelegramAccessChecker() {
     )
   }
 
-  // Если пользователь имеет ID 1171820656 - показываем профиль
+  // Если пользователь имеет ID 1171820656 - показываем админ-панель
   if (hasProfileAccess) {
-    return <UserProfile />
+    return <AdminPanel />
   }
 
   // Для всех остальных пользователей - показываем Coming Soon
