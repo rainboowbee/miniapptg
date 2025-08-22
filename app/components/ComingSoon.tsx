@@ -1,43 +1,31 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
+import Lottie from 'lottie-react'
+import animationData from '@/src/assets/AnimatedSticker.json'
 
 export function ComingSoon() {
-  const [useTgs, setUseTgs] = useState(true)
-  const [imageError, setImageError] = useState(false)
-
-  // Проверяем поддержку TGS формата
-  useEffect(() => {
-    // Простая проверка поддержки TGS
-    const testTgsSupport = () => {
-      const canvas = document.createElement('canvas')
-      const ctx = canvas.getContext('2d')
-      if (ctx) {
-        // Пытаемся загрузить TGS
-        const img = new Image()
-        img.onload = () => setUseTgs(true)
-        img.onerror = () => setUseTgs(false)
-        img.src = '/AnimatedSticker.tgs'
-      }
-    }
-    
-    testTgsSupport()
-  }, [])
-
-  const handleImageError = () => {
-    setImageError(true)
-  }
+  const [animationError, setAnimationError] = useState(false)
 
   return (
     <div className="min-h-screen relative stars-bg flex flex-col items-center justify-center">
       {/* Стикер по центру */}
       <div className="mb-8">
-        <img 
-          src={useTgs && !imageError ? "/AnimatedSticker.tgs" : "/sticker.svg"}
-          alt="Coming Soon" 
-          className="w-32 h-32 md:w-40 md:h-40"
-          onError={handleImageError}
-        />
+        {!animationError ? (
+          <Lottie 
+            animationData={animationData} 
+            loop={true} 
+            autoplay={true} 
+            style={{ width: 160, height: 160 }}
+            onError={() => setAnimationError(true)}
+          />
+        ) : (
+          <img 
+            src="/sticker.svg" 
+            alt="Coming Soon" 
+            className="w-32 h-40 md:w-40 md:h-40"
+          />
+        )}
       </div>
       
       {/* Текст Coming Soon */}
