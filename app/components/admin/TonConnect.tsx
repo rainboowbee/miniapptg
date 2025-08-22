@@ -1,6 +1,5 @@
 'use client'
 
-import { useState } from 'react'
 import { TonConnectButton } from '@tonconnect/ui-react'
 
 interface TonConnectProps {
