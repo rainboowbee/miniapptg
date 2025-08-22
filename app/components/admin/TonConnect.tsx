@@ -1,16 +1,26 @@
 'use client'
 
-import { TonConnectButton } from '@tonconnect/ui-react'
+import { useTonConnect } from '@tonconnect/ui-react'
 
 interface TonConnectProps {
   onClose: () => void
 }
 
 export function TonConnect({ onClose }: TonConnectProps) {
+  const { connected, account, connect, disconnect } = useTonConnect()
+
+  const handleConnect = () => {
+    connect()
+  }
+
+  const handleDisconnect = () => {
+    disconnect()
+  }
+
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
       <div className="bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 p-8 max-w-md w-full mx-4">
-        {/* Заголовок */}
+        {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-2xl font-bold text-white">TON Connect</h2>
           <button
@@ -23,59 +33,60 @@ export function TonConnect({ onClose }: TonConnectProps) {
           </button>
         </div>
 
-        {/* TON Логотип */}
-        <div className="text-center mb-6">
-          <div className="w-20 h-20 mx-auto mb-4 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
-            <svg className="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-            </svg>
+        {/* TON Logo */}
+        <div className="flex justify-center mb-6">
+          <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+            <span className="text-white text-2xl font-bold">TON</span>
           </div>
-          <h3 className="text-lg font-semibold text-white mb-2">Подключение TON кошелька</h3>
-          <p className="text-gray-300 text-sm">
-            Подключите свой TON кошелек для управления приложением
-          </p>
         </div>
 
-        {/* TON Connect Button */}
-        <div className="mb-6">
-          <TonConnectButton 
-            className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white py-3 px-6 rounded-lg font-medium hover:from-blue-600 hover:to-purple-700 transition-all duration-200"
-          />
-        </div>
-
-        {/* Информация о TON */}
-        <div className="bg-white/5 rounded-lg p-4 border border-white/10 mb-6">
-          <div className="flex items-center space-x-3 mb-3">
-            <div className="w-8 h-8 bg-blue-500/20 rounded-lg flex items-center justify-center">
-              <svg className="w-4 h-4 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
-              </svg>
+        {/* Connection Status */}
+        {!connected ? (
+          <div className="mb-6">
+            <button
+              onClick={handleConnect}
+              className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white py-3 px-6 rounded-lg font-medium hover:from-blue-600 hover:to-purple-700 transition-all duration-200"
+            >
+              Подключить TON кошелек
+            </button>
+          </div>
+        ) : (
+          <div className="mb-6 space-y-4">
+            <div className="bg-green-500/20 border border-green-500/30 rounded-lg p-4">
+              <div className="flex items-center space-x-2 mb-2">
+                <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                <span className="text-green-400 font-medium">Подключено</span>
+              </div>
+              <p className="text-white text-sm break-all">
+                {account?.address || 'Адрес кошелька'}
+              </p>
+              {account?.chain && (
+                <p className="text-gray-400 text-xs mt-1">
+                  Сеть: {account.chain}
+                </p>
+              )}
             </div>
-            <span className="text-white font-medium">Преимущества подключения</span>
+            <button
+              onClick={handleDisconnect}
+              className="w-full bg-red-500/20 border border-red-500/30 text-red-400 py-2 px-4 rounded-lg hover:bg-red-500/30 transition-colors"
+            >
+              Отключить
+            </button>
           </div>
-          <ul className="text-gray-300 text-sm space-y-2">
-            <li className="flex items-center space-x-2">
-              <svg className="w-4 h-4 text-green-400" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-              </svg>
-              <span>Безопасные транзакции</span>
-            </li>
-            <li className="flex items-center space-x-2">
-              <svg className="w-4 h-4 text-green-400" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-              </svg>
-              <span>Управление токенами</span>
-            </li>
-            <li className="flex items-center space-x-2">
-              <svg className="w-4 h-4 text-green-400" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-              </svg>
-              <span>Децентрализованное управление</span>
-            </li>
+        )}
+
+        {/* Information about TON */}
+        <div className="bg-white/5 rounded-lg p-4 border border-white/10 mb-6">
+          <h3 className="text-white font-medium mb-2">Преимущества TON:</h3>
+          <ul className="text-gray-300 text-sm space-y-1">
+            <li>• Быстрые и дешевые транзакции</li>
+            <li>• Высокая безопасность</li>
+            <li>• Интеграция с Telegram</li>
+            <li>• Поддержка смарт-контрактов</li>
           </ul>
         </div>
 
-        {/* Информация о безопасности */}
+        {/* Information about security */}
         <div className="text-center">
           <p className="text-gray-400 text-xs">
             Ваши данные защищены криптографически. Приватные ключи никогда не покидают ваш кошелек.
