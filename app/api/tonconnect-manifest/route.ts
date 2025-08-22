@@ -1,9 +1,10 @@
 import { NextResponse } from 'next/server'
-import { getTonConnectBaseUrl } from '@/lib/tonconnect'
 
 export async function GET() {
-  const baseUrl = getTonConnectBaseUrl()
-  
+  const baseUrl = process.env.NODE_ENV === 'production' 
+    ? 'https://miniapptg-bay.vercel.app' 
+    : 'http://localhost:3000'
+
   const manifest = {
     url: baseUrl,
     name: "Telegram Mini App",

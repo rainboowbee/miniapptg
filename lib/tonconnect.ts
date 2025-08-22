@@ -1,5 +1,3 @@
-import { TonConnect } from '@tonconnect/sdk'
-
 /**
  * Утилита для TON Connect
  */
@@ -18,7 +16,20 @@ export function getTonConnectBaseUrl(): string {
   return 'http://localhost:3000'
 }
 
-// Создание экземпляра TonConnect SDK
-export const tonConnect = new TonConnect({
-  manifestUrl: getTonConnectManifestUrl()
-})
+// Создание экземпляра TonConnect SDK только на клиенте
+let tonConnect: any = null
+
+export function getTonConnect() {
+  if (typeof window === 'undefined') {
+    return null
+  }
+  
+  if (!tonConnect) {
+    const { TonConnect } = require('@tonconnect/sdk')
+    tonConnect = new TonConnect({
+      manifestUrl: getTonConnectManifestUrl()
+    })
+  }
+  
+  return tonConnect
+}
