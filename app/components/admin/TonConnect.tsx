@@ -1,6 +1,7 @@
 'use client'
 
 import { useTonConnectUI } from '@tonconnect/ui-react'
+import { useState, useEffect } from 'react'
 
 interface TonConnectProps {
   onClose: () => void
@@ -8,19 +9,45 @@ interface TonConnectProps {
 
 export function TonConnect({ onClose }: TonConnectProps) {
   const [tonConnectUI] = useTonConnectUI()
+  const [balance, setBalance] = useState<string>('0')
+  const [isLoadingBalance, setIsLoadingBalance] = useState(false)
+
+  // Получение баланса кошелька
+  const fetchBalance = async () => {
+    if (!tonConnectUI.account) return
+    
+    try {
+      setIsLoadingBalance(true)
+      // Здесь должна быть логика получения баланса
+      // Пока используем заглушку
+      const mockBalance = (Math.random() * 100).toFixed(4)
+      setBalance(mockBalance)
+    } catch (error) {
+      console.error('Ошибка получения баланса:', error)
+      setBalance('0')
+    } finally {
+      setIsLoadingBalance(false)
+    }
+  }
+
+  useEffect(() => {
+    if (tonConnectUI.account) {
+      fetchBalance()
+    }
+  }, [tonConnectUI.account])
 
   const handleConnect = async () => {
     try {
       await tonConnectUI.connectWallet()
     } catch (error) {
       console.error('Ошибка подключения TON кошелька:', error)
-      // Можно добавить уведомление пользователю об ошибке
     }
   }
 
   const handleDisconnect = async () => {
     try {
       await tonConnectUI.disconnect()
+      setBalance('0')
     } catch (error) {
       console.error('Ошибка отключения TON кошелька:', error)
     }
@@ -31,7 +58,7 @@ export function TonConnect({ onClose }: TonConnectProps) {
       <div className="bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 p-8 max-w-md w-full mx-4">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold text-white">TON Connect</h2>
+          <h2 className="text-2xl font-bold text-white font-doto">TON Connect</h2>
           <button
             onClick={onClose}
             className="text-gray-400 hover:text-white transition-colors"
@@ -50,33 +77,65 @@ export function TonConnect({ onClose }: TonConnectProps) {
         </div>
 
         {/* Connection Status */}
-        <div className="mb-6">
-          <button
-            onClick={handleConnect}
-            className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white py-3 px-6 rounded-lg font-medium hover:from-blue-600 hover:to-purple-700 transition-all duration-200"
-          >
-            Подключить TON кошелек
-          </button>
-        </div>
-
-        {/* Information about connection */}
-        <div className="bg-white/5 rounded-lg p-4 border border-white/10 mb-6">
-          <div className="flex items-center space-x-3 mb-3">
-            <div className="w-8 h-8 bg-blue-500/20 rounded-lg flex items-center justify-center">
-              <svg className="w-4 h-4 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
-              </svg>
-            </div>
-            <span className="text-white font-medium">Статус подключения</span>
+        {!tonConnectUI.account ? (
+          <div className="mb-6">
+            <button
+              onClick={handleConnect}
+              className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white py-3 px-6 rounded-lg font-medium hover:from-blue-600 hover:to-purple-700 transition-all duration-200"
+            >
+              Подключить TON кошелек
+            </button>
           </div>
-          <p className="text-gray-300 text-sm">
-            Нажмите кнопку выше для подключения TON кошелька. После подключения вы сможете управлять своими токенами и выполнять транзакции.
-          </p>
-        </div>
+        ) : (
+          <div className="mb-6 space-y-4">
+            {/* Информация о кошельке */}
+            <div className="bg-green-500/20 border border-green-500/30 rounded-lg p-4">
+              <div className="flex items-center space-x-2 mb-2">
+                <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                <span className="text-green-400 font-medium">Подключено</span>
+              </div>
+              <p className="text-white text-sm break-all mb-2">
+                {tonConnectUI.account?.address || 'Адрес кошелька'}
+              </p>
+              {tonConnectUI.account?.chain && (
+                <p className="text-gray-400 text-xs">
+                  Сеть: {tonConnectUI.account.chain}
+                </p>
+              )}
+            </div>
+
+            {/* Баланс кошелька */}
+            <div className="bg-blue-500/20 border border-blue-500/30 rounded-lg p-4">
+              <div className="flex items-center justify-between">
+                <span className="text-blue-400 font-medium">Баланс:</span>
+                <div className="flex items-center space-x-2">
+                  {isLoadingBalance ? (
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-400"></div>
+                  ) : (
+                    <span className="text-white font-bold text-lg">{balance} TON</span>
+                  )}
+                </div>
+              </div>
+              <button
+                onClick={fetchBalance}
+                className="mt-2 text-blue-400 text-xs hover:text-blue-300 transition-colors"
+              >
+                Обновить баланс
+              </button>
+            </div>
+
+            <button
+              onClick={handleDisconnect}
+              className="w-full bg-red-500/20 border border-red-500/30 text-red-400 py-2 px-4 rounded-lg hover:bg-red-500/30 transition-colors"
+            >
+              Отключить
+            </button>
+          </div>
+        )}
 
         {/* Information about TON */}
         <div className="bg-white/5 rounded-lg p-4 border border-white/10 mb-6">
-          <h3 className="text-white font-medium mb-2">Преимущества TON:</h3>
+          <h3 className="text-white font-medium mb-2 font-doto">Преимущества TON:</h3>
           <ul className="text-gray-300 text-sm space-y-1">
             <li>• Быстрые и дешевые транзакции</li>
             <li>• Высокая безопасность</li>

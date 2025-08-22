@@ -7,6 +7,9 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        'doto': ['Doto', 'sans-serif'],
+      },
       colors: {
         telegram: {
           50: '#f0f9ff',

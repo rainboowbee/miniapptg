@@ -73,10 +73,10 @@ export function UserProfile() {
       <div className="max-w-md mx-auto pt-8 relative z-20">
         {/* Заголовок */}
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-white mb-2 animate-fade-in">
+          <h1 className="text-3xl font-bold text-white mb-2 animate-fade-in font-doto">
             Профиль пользователя
           </h1>
-          <p className="text-gray-300 animate-fade-in" style={{ animationDelay: '0.1s' }}>
+          <p className="text-gray-300 animate-fade-in font-doto" style={{ animationDelay: '0.1s' }}>
             Данные из Telegram Mini App
           </p>
         </div>

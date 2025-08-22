@@ -66,7 +66,7 @@ export function AdminPanel() {
           <div className="flex space-x-4">
             <button
               onClick={() => setActiveTab('users')}
-              className={`px-6 py-3 rounded-lg border transition-colors ${
+              className={`px-6 py-3 rounded-lg border transition-colors font-doto ${
                 activeTab === 'users'
                   ? 'border-pink-400 bg-pink-400/20 text-white'
                   : 'border-white/20 text-gray-300 hover:border-pink-400/50'
@@ -76,7 +76,7 @@ export function AdminPanel() {
             </button>
             <button
               onClick={() => setActiveTab('analytics')}
-              className={`px-6 py-3 rounded-lg border transition-colors ${
+              className={`px-6 py-3 rounded-lg border transition-colors font-doto ${
                 activeTab === 'analytics'
                   ? 'border-pink-400 bg-pink-400/20 text-white'
                   : 'border-white/20 text-gray-300 hover:border-pink-400/50'
@@ -86,7 +86,7 @@ export function AdminPanel() {
             </button>
             <button
               onClick={() => setActiveTab('profile')}
-              className={`px-6 py-3 rounded-lg border transition-colors ${
+              className={`px-6 py-3 rounded-lg border transition-colors font-doto ${
                 activeTab === 'profile'
                   ? 'border-pink-400 bg-pink-400/20 text-white'
                   : 'border-white/20 text-gray-300 hover:border-pink-400/50'
