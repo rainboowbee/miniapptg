@@ -107,6 +107,33 @@
   animation: twinkle 3s ease-in-out infinite;
 }
 
+/* TON Connect стили */
+[data-tc-modal-opened] {
+  z-index: 9999 !important;
+}
+
+[data-tc-dropdown-container] {
+  z-index: 9999 !important;
+  background: rgba(0, 0, 0, 0.9) !important;
+  backdrop-filter: blur(10px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  border-radius: 16px !important;
+}
+
+[data-tc-button] {
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6) !important;
+  border: none !important;
+  border-radius: 12px !important;
+  color: white !important;
+  font-weight: 500 !important;
+  transition: all 0.2s ease !important;
+}
+
+[data-tc-button]:hover {
+  background: linear-gradient(135deg, #2563eb, #7c3aed) !important;
+  transform: translateY(-1px) !important;
+}
+
 .stars-bg .twinkle:nth-child(2) {
   animation-delay: 1s;
 }
