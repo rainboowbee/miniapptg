@@ -3,6 +3,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { getTelegramUser, initTelegramWebApp } from '@/lib/telegram'
 import { useEffect, useState } from 'react'
+import { useTonWallet } from './useTonWallet'
 
 interface TelegramUserData {
   telegramId: string
@@ -27,6 +28,7 @@ export function useTelegramUser() {
   const [telegramUser, setTelegramUser] = useState<TelegramUserData | null>(null)
   const [isCheckingAccess, setIsCheckingAccess] = useState(true)
   const queryClient = useQueryClient()
+  const { account: walletAccount, isConnected: isWalletConnected } = useTonWallet()
 
   // Инициализируем Telegram Web App при загрузке
   useEffect(() => {
@@ -106,5 +108,7 @@ export function useTelegramUser() {
     isTelegramAvailable: !!telegramUser,
     isCheckingAccess,
     hasProfileAccess,
+    isWalletConnected,
+    walletAccount,
   }
 }

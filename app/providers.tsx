@@ -1,7 +1,7 @@
 'use client'
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { TonConnectUIProvider } from '@tonconnect/ui-react'
+import { TonConnectUIProvider, THEME } from '@tonconnect/ui-react'
 import { useState } from 'react'
 import { getTonConnectManifestUrl } from '@/lib/tonconnect'
 
@@ -16,7 +16,12 @@ export function Providers({ children }: { children: React.ReactNode }) {
   }))
 
   return (
-    <TonConnectUIProvider manifestUrl={getTonConnectManifestUrl()}>
+    <TonConnectUIProvider 
+      manifestUrl={getTonConnectManifestUrl()}
+      uiPreferences={{
+        theme: THEME.DARK
+      }}
+    >
       <QueryClientProvider client={queryClient}>
         {children}
       </QueryClientProvider>

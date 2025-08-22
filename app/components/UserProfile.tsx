@@ -4,7 +4,11 @@ import { useTelegramUser } from '@/app/hooks/useTelegramUser'
 import Image from 'next/image'
 
 export function UserProfile() {
-  const { user, isLoading, error, isTelegramAvailable } = useTelegramUser()
+  const { user, isLoading, error, isTelegramAvailable, isWalletConnected, walletAccount, balance } = useTelegramUser()
+
+  const formatAddress = (address: string) => {
+    return `${address.slice(0, 6)}...${address.slice(-4)}`
+  }
 
   if (!isTelegramAvailable) {
     return (
@@ -150,7 +154,7 @@ export function UserProfile() {
             </div>
 
             {/* Последнее обновление */}
-            <div className="flex items-center justify-between py-3">
+            <div className="flex items-center justify-between py-3 border-b border-white/10">
               <div className="flex items-center">
                 <div className="w-8 h-8 bg-blue-500/20 rounded-lg flex items-center justify-center mr-3 border border-blue-500/30">
                   <svg className="w-4 h-4 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
@@ -163,13 +167,47 @@ export function UserProfile() {
                 {new Date(user.updatedAt).toLocaleDateString('ru-RU')}
               </span>
             </div>
+
+            {/* TON Кошелек */}
+            {isWalletConnected && walletAccount && (
+              <div className="flex items-center justify-between py-3 border-b border-white/10">
+                <div className="flex items-center">
+                  <div className="w-8 h-8 bg-blue-500/20 rounded-lg flex items-center justify-center mr-3 border border-blue-500/30">
+                    <svg className="w-4 h-4 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z" />
+                    </svg>
+                  </div>
+                  <span className="text-gray-200 font-medium">TON Кошелек</span>
+                </div>
+                <span className="text-white font-mono text-sm">
+                  {formatAddress(walletAccount.address)}
+                </span>
+              </div>
+            )}
+
+            {/* Баланс TON */}
+            {isWalletConnected && (
+              <div className="flex items-center justify-between py-3">
+                <div className="flex items-center">
+                  <div className="w-8 h-8 bg-green-500/20 rounded-lg flex items-center justify-center mr-3 border border-green-500/30">
+                    <svg className="w-4 h-4 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                  <span className="text-gray-200 font-medium">Баланс TON</span>
+                </div>
+                <span className="text-white font-bold">
+                  {balance || '0'} TON
+                </span>
+              </div>
+            )}
           </div>
         </div>
 
         {/* Информация о приложении */}
         <div className="mt-6 text-center">
           <p className="text-gray-400 text-sm animate-fade-in" style={{ animationDelay: '0.3s' }}>
-            Это приложение работает как Telegram Mini App
+            Это приложение работает как Telegram Mini App с интеграцией TON
           </p>
         </div>
       </div>
