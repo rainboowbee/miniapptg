@@ -48,21 +48,31 @@ export function useTelegramUser() {
 
   // Инициализируем Telegram Web App при загрузке
   useEffect(() => {
+    console.log('🔧 Initializing Telegram Web App...')
     initTelegramWebApp()
     
     const user = getTelegramUser()
+    console.log('👤 Telegram user data:', user)
+    
     if (user) {
-      setTelegramUser({
+      const userData = {
         telegramId: user.id.toString(),
         username: user.username,
         firstName: user.first_name,
         lastName: user.last_name,
         avatar: user.photo_url,
-      })
+      }
+      console.log('📝 Setting telegram user data:', userData)
+      setTelegramUser(userData)
+    } else {
+      console.log('❌ No Telegram user data found')
     }
     
     // Завершаем проверку доступа
-    setTimeout(() => setIsCheckingAccess(false), 1000)
+    setTimeout(() => {
+      console.log('✅ Access check completed')
+      setIsCheckingAccess(false)
+    }, 1000)
   }, [])
 
   // Получаем пользователя из БД
@@ -70,14 +80,19 @@ export function useTelegramUser() {
     queryKey: ['user', telegramUser?.telegramId],
     queryFn: async (): Promise<User> => {
       if (!telegramUser?.telegramId) {
+        console.log('❌ No telegramId for query')
         throw new Error('No Telegram user data')
       }
       
+      console.log('🔍 Fetching user from DB with telegramId:', telegramUser.telegramId)
       const response = await fetch(`/api/user?telegramId=${telegramUser.telegramId}`)
       if (!response.ok) {
+        console.log('❌ Failed to fetch user, status:', response.status)
         throw new Error('Failed to fetch user')
       }
-      return response.json()
+      const userData = await response.json()
+      console.log('✅ User found in DB:', userData)
+      return userData
     },
     enabled: !!telegramUser?.telegramId,
     retry: 2,
@@ -88,6 +103,7 @@ export function useTelegramUser() {
   // Создаем или обновляем пользователя
   const createOrUpdateUser = useMutation({
     mutationFn: async (userData: TelegramUserData): Promise<User> => {
+      console.log('🚀 Creating/updating user:', userData)
       const response = await fetch('/api/user', {
         method: 'POST',
         headers: {
@@ -98,12 +114,16 @@ export function useTelegramUser() {
       
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}))
+        console.log('❌ Error response:', response.status, errorData)
         throw new Error(errorData.error || `HTTP ${response.status}: ${response.statusText}`)
       }
       
-      return response.json()
+      const result = await response.json()
+      console.log('✅ User created/updated successfully:', result)
+      return result
     },
     onSuccess: () => {
+      console.log('🎉 Mutation successful, updating cache...')
       // Обновляем кеш после успешного создания/обновления
       if (telegramUser?.telegramId) {
         queryClient.setQueryData(['user', telegramUser.telegramId], (oldData: any) => ({
@@ -115,12 +135,12 @@ export function useTelegramUser() {
       errorCountRef.current = 0
     },
     onError: (error) => {
-      console.error('Error creating/updating user:', error)
+      console.error('💥 Error creating/updating user:', error)
       errorCountRef.current++
       
       // Если слишком много ошибок, не пытаемся больше
       if (errorCountRef.current >= maxRetries) {
-        console.warn('Max retries reached, stopping attempts to create user')
+        console.warn('⚠️ Max retries reached, stopping attempts to create user')
         hasAttemptedCreate.current = true
       } else {
         // Сбрасываем флаг при ошибке, чтобы можно было попробовать снова
@@ -131,9 +151,20 @@ export function useTelegramUser() {
 
   // Автоматически создаем/обновляем пользователя при получении данных из Telegram
   useEffect(() => {
+    console.log('🔄 Checking if should create user:', {
+      telegramUser: !!telegramUser,
+      user: !!user,
+      isLoading,
+      isPending: createOrUpdateUser.isPending,
+      hasAttempted: hasAttemptedCreate.current,
+      errorCount: errorCountRef.current
+    })
+    
     if (telegramUser && !user && !isLoading && !createOrUpdateUser.isPending && !hasAttemptedCreate.current && errorCountRef.current < maxRetries) {
+      console.log('⏰ Scheduling user creation...')
       // Добавляем небольшую задержку для предотвращения слишком частых запросов
       createTimeoutRef.current = setTimeout(() => {
+        console.log('🎯 Executing user creation...')
         hasAttemptedCreate.current = true
         createOrUpdateUser.mutate(telegramUser)
       }, 1000) // Увеличиваем задержку до 1 секунды
@@ -142,6 +173,19 @@ export function useTelegramUser() {
 
   // Проверяем, имеет ли пользователь доступ к профилю (админ)
   const hasProfileAccess = telegramUser?.telegramId === '1171820656'
+
+  console.log('📊 Hook state:', {
+    telegramUser,
+    user,
+    isLoading,
+    error,
+    isTelegramAvailable: !!telegramUser,
+    isCheckingAccess,
+    hasProfileAccess,
+    isWalletConnected,
+    walletAccount,
+    balance,
+  })
 
   return {
     telegramUser,

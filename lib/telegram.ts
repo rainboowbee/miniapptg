@@ -44,31 +44,93 @@ export interface TelegramWebApp {
 
 // Проверяем, запущено ли приложение в Telegram
 export const isTelegramWebApp = (): boolean => {
-  if (typeof window === 'undefined') return false
-  return 'Telegram' in window && 'WebApp' in (window as any).Telegram
+  if (typeof window === 'undefined') {
+    console.log('🌐 isTelegramWebApp: window is undefined (SSR)')
+    return false
+  }
+  
+  const hasTelegram = 'Telegram' in window
+  const hasWebApp = hasTelegram && 'WebApp' in (window as any).Telegram
+  
+  console.log('🔍 isTelegramWebApp check:', {
+    hasTelegram,
+    hasWebApp,
+    windowKeys: Object.keys(window).filter(key => key.toLowerCase().includes('telegram'))
+  })
+  
+  return hasTelegram && hasWebApp
 }
 
 // Получаем экземпляр Telegram Web App
 export const getTelegramWebApp = (): TelegramWebApp | null => {
-  if (typeof window === 'undefined') return null
-  if (!isTelegramWebApp()) return null
+  if (typeof window === 'undefined') {
+    console.log('🌐 getTelegramWebApp: window is undefined (SSR)')
+    return null
+  }
   
-  return (window as any).Telegram.WebApp
+  if (!isTelegramWebApp()) {
+    console.log('❌ getTelegramWebApp: Telegram Web App not available')
+    return null
+  }
+  
+  const webApp = (window as any).Telegram.WebApp
+  console.log('✅ getTelegramWebApp: Web App instance found:', {
+    hasInitData: !!webApp.initData,
+    hasInitDataUnsafe: !!webApp.initDataUnsafe,
+    initDataLength: webApp.initData?.length || 0,
+    user: webApp.initDataUnsafe?.user
+  })
+  
+  return webApp
 }
 
 // Получаем данные пользователя из Telegram
 export const getTelegramUser = (): TelegramUser | null => {
   const webApp = getTelegramWebApp()
-  if (!webApp) return null
+  if (!webApp) {
+    console.log('❌ getTelegramUser: No Web App instance')
+    return null
+  }
   
-  return webApp.initDataUnsafe.user || null
+  const user = webApp.initDataUnsafe.user
+  console.log('👤 getTelegramUser: User data:', user)
+  
+  if (!user) {
+    console.log('❌ getTelegramUser: No user data in initDataUnsafe')
+    // Попробуем альтернативный способ получения данных
+    console.log('🔍 getTelegramUser: Checking alternative data sources...')
+    console.log('📊 Web App state:', {
+      initData: webApp.initData,
+      initDataUnsafe: webApp.initDataUnsafe,
+      ready: typeof webApp.ready,
+      expand: typeof webApp.expand
+    })
+  }
+  
+  return user || null
 }
 
 // Инициализируем Telegram Web App
 export const initTelegramWebApp = (): void => {
-  const webApp = getTelegramWebApp()
-  if (!webApp) return
+  console.log('🔧 initTelegramWebApp: Starting initialization...')
   
-  webApp.ready()
-  webApp.expand()
+  const webApp = getTelegramWebApp()
+  if (!webApp) {
+    console.log('❌ initTelegramWebApp: Cannot initialize - no Web App instance')
+    return
+  }
+  
+  try {
+    console.log('🚀 initTelegramWebApp: Calling ready()...')
+    webApp.ready()
+    console.log('✅ initTelegramWebApp: ready() called successfully')
+    
+    console.log('🚀 initTelegramWebApp: Calling expand()...')
+    webApp.expand()
+    console.log('✅ initTelegramWebApp: expand() called successfully')
+    
+    console.log('🎉 initTelegramWebApp: Initialization completed successfully')
+  } catch (error) {
+    console.error('💥 initTelegramWebApp: Error during initialization:', error)
+  }
 }
