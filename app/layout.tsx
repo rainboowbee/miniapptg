@@ -28,7 +28,7 @@ export default function RootLayout({
         {/* Telegram Web App Script */}
         <script src="https://telegram.org/js/telegram-web-app.js" />
       </head>
-      <body className={inter.className}>
+      <body className={`${inter.className} font-doto`}>
         <Providers>
           {children}
         </Providers>

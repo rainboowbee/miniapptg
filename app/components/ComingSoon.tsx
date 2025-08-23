@@ -49,37 +49,13 @@ export function ComingSoon() {
         )}
       </div>
 
-      {/* Заголовок */}
-      <div className="text-center mb-8 relative z-20">
-        <h1 className="text-4xl md:text-6xl font-bold text-white mb-4 animate-fade-in font-doto">
-          Скоро открытие
-        </h1>
-        <p className="text-xl md:text-2xl text-gray-300 animate-fade-in font-doto" style={{ animationDelay: '0.1s' }}>
-          Мы готовим для вас что-то особенное
-        </p>
-      </div>
-
       {/* Описание */}
       <div className="text-center mb-12 relative z-20 max-w-2xl mx-auto px-4">
         <p className="text-lg text-gray-400 animate-fade-in font-doto" style={{ animationDelay: '0.2s' }}>
-          Это приложение работает как Telegram Mini App с интеграцией TON блокчейна. 
-          Оставайтесь с нами для получения обновлений!
+          Coming soon...
         </p>
       </div>
 
-      {/* Кнопка */}
-      <div className="relative z-20">
-        <button className="px-8 py-4 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold rounded-lg hover:from-purple-600 hover:to-pink-600 transition-all duration-300 transform hover:scale-105 animate-fade-in font-doto" style={{ animationDelay: '0.3s' }}>
-          Уведомить о запуске
-        </button>
-      </div>
-
-      {/* Дополнительная информация */}
-      <div className="mt-16 text-center relative z-20">
-        <p className="text-sm text-gray-500 animate-fade-in font-doto" style={{ animationDelay: '0.4s' }}>
-          Разработано с использованием Next.js 14 и TON Connect
-        </p>
-      </div>
     </div>
   )
 }
