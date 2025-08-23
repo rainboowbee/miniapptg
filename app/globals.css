@@ -2,197 +2,39 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  :root {
-    --font-doto: 'Doto', system-ui, sans-serif;
-  }
-  
-  html {
-    font-family: var(--font-doto);
-  }
-  
-  body {
-    @apply bg-black text-white overflow-x-hidden;
-    font-family: var(--font-doto);
-  }
-  
-  /* Применяем шрифт Doto ко всем элементам по умолчанию */
-  * {
-    font-family: var(--font-doto);
-  }
-  
-  /* Применяем шрифт к заголовкам */
-  h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-doto);
-  }
-  
-  /* Применяем шрифт к параграфам */
-  p {
-    font-family: var(--font-doto);
-  }
-  
-  /* Применяем шрифт к кнопкам */
-  button {
-    font-family: var(--font-doto);
-  }
-  
-  /* Применяем шрифт к input полям */
-  input, textarea, select {
-    font-family: var(--font-doto);
-  }
-  
-  /* Применяем шрифт к ссылкам */
-  a {
-    font-family: var(--font-doto);
-  }
-  
-  /* Применяем шрифт к span и div */
-  span, div {
-    font-family: var(--font-doto);
-  }
+:root {
+  --foreground-rgb: 255, 255, 255;
+  --background-start-rgb: 17, 24, 39;
+  --background-end-rgb: 17, 24, 39;
 }
 
-@layer components {
-  .telegram-gradient {
-    background: linear-gradient(135deg, #0088cc 0%, #0077b3 100%);
-  }
-  
-  .card-shadow {
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-  }
-
-  .stars-bg {
-    background: radial-gradient(2px 2px at 20px 30px, #eee, transparent),
-                radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.8), transparent),
-                radial-gradient(1px 1px at 90px 40px, #fff, transparent),
-                radial-gradient(1px 1px at 130px 80px, rgba(255,255,255,0.6), transparent),
-                radial-gradient(2px 2px at 160px 30px, #ddd, transparent),
-                radial-gradient(1px 1px at 200px 60px, rgba(255,255,255,0.4), transparent),
-                radial-gradient(1px 1px at 250px 90px, #ccc, transparent);
-    background-repeat: repeat;
-    background-size: 200px 200px;
-    animation: stars1 20s linear infinite;
-  }
-
-  .stars-bg::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: radial-gradient(1px 1px at 50px 100px, rgba(255,255,255,0.8), transparent),
-                radial-gradient(1px 1px at 120px 150px, #fff, transparent),
-                radial-gradient(2px 2px at 180px 50px, rgba(255,255,255,0.6), transparent),
-                radial-gradient(1px 1px at 220px 120px, #ddd, transparent),
-                radial-gradient(1px 1px at 280px 180px, rgba(255,255,255,0.5), transparent),
-                radial-gradient(1px 1px at 320px 220px, #eee, transparent);
-    background-repeat: repeat;
-    background-size: 300px 300px;
-    animation: stars2 15s linear infinite;
-  }
-
-  .stars-bg::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: radial-gradient(1px 1px at 80px 200px, rgba(255,255,255,0.7), transparent),
-                radial-gradient(1px 1px at 150px 250px, #fff, transparent),
-                radial-gradient(2px 2px at 200px 100px, rgba(255,255,255,0.5), transparent),
-                radial-gradient(1px 1px at 350px 150px, rgba(255,255,255,0.6), transparent),
-                radial-gradient(1px 1px at 400px 280px, #ddd, transparent);
-    background-repeat: repeat;
-    background-size: 250px 250px;
-    animation: stars3 25s linear infinite;
-  }
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
 }
 
-@keyframes stars1 {
-  0% {
-    background-position: 0 0;
-  }
-  100% {
-    background-position: 0 -200px;
-  }
-}
-
-@keyframes stars2 {
-  0% {
-    background-position: 0 0;
-  }
-  100% {
-    background-position: 0 -300px;
-  }
-}
-
-@keyframes stars3 {
-  0% {
-    background-position: 0 0;
-  }
-  100% {
-    background-position: 0 -250px;
-  }
-}
-
-/* Дополнительные эффекты для космического фона */
-@keyframes twinkle {
-  0%, 100% { opacity: 0.3; }
-  50% { opacity: 1; }
-}
-
-.stars-bg .twinkle {
-  animation: twinkle 3s ease-in-out infinite;
-}
-
-/* TON Connect стили */
-[data-tc-modal-opened] {
-  z-index: 9999 !important;
-}
-
-[data-tc-dropdown-container] {
-  z-index: 9999 !important;
-  background: rgba(0, 0, 0, 0.9) !important;
-  backdrop-filter: blur(10px) !important;
-  border: 1px solid rgba(255, 255, 255, 0.2) !important;
-  border-radius: 16px !important;
-}
-
-[data-tc-button] {
-  background: linear-gradient(135deg, #3b82f6, #8b5cf6) !important;
-  border: none !important;
-  border-radius: 12px !important;
-  color: white !important;
-  font-weight: 500 !important;
-  transition: all 0.2s ease !important;
-}
-
-[data-tc-button]:hover {
-  background: linear-gradient(135deg, #2563eb, #7c3aed) !important;
-  transform: translateY(-1px) !important;
-}
-
-.stars-bg .twinkle:nth-child(2) {
-  animation-delay: 1s;
-}
-
-.stars-bg .twinkle:nth-child(3) {
-  animation-delay: 2s;
-}
-
+/* Простые анимации */
 @keyframes fadeIn {
-  0% { opacity: 0; }
-  100% { opacity: 1; }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-@keyframes slideUp {
-  0% { transform: translateY(10px); opacity: 0; }
-  100% { transform: translateY(0); opacity: 1; }
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out;
 }
 
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
+/* Telegram Web App стили */
+.telegram-web-app {
+  background: transparent;
 }

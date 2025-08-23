@@ -1,5 +1,5 @@
-import { TelegramAccessChecker } from './components/TelegramAccessChecker'
+import { TelegramUserManager } from '@/app/components/TelegramUserManager'
 
 export default function Home() {
-  return <TelegramAccessChecker />
+  return <TelegramUserManager />
 }
