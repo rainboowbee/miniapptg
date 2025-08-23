@@ -2,7 +2,7 @@
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { getTelegramUser, initTelegramWebApp } from '@/lib/telegram'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef, useCallback } from 'react'
 import { useTonWallet } from './useTonWallet'
 
 interface TelegramUserData {
@@ -28,10 +28,23 @@ export function useTelegramUser() {
   const [telegramUser, setTelegramUser] = useState<TelegramUserData | null>(null)
   const [isCheckingAccess, setIsCheckingAccess] = useState(true)
   const queryClient = useQueryClient()
+  const hasAttemptedCreate = useRef(false)
+  const createTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const errorCountRef = useRef(0)
+  const maxRetries = 3
   
   // Инициализируем TON кошелек только на клиенте
   const tonWallet = typeof window !== 'undefined' ? useTonWallet() : null
   const { account: walletAccount, isConnected: isWalletConnected, balance } = tonWallet || { account: null, isConnected: false, balance: null }
+
+  // Очищаем таймаут при размонтировании
+  useEffect(() => {
+    return () => {
+      if (createTimeoutRef.current) {
+        clearTimeout(createTimeoutRef.current)
+      }
+    }
+  }, [])
 
   // Инициализируем Telegram Web App при загрузке
   useEffect(() => {
@@ -67,6 +80,9 @@ export function useTelegramUser() {
       return response.json()
     },
     enabled: !!telegramUser?.telegramId,
+    retry: 2,
+    retryDelay: 1000,
+    staleTime: 30000, // Кешируем на 30 секунд
   })
 
   // Создаем или обновляем пользователя
@@ -81,29 +97,48 @@ export function useTelegramUser() {
       })
       
       if (!response.ok) {
-        throw new Error('Failed to create/update user')
+        const errorData = await response.json().catch(() => ({}))
+        throw new Error(errorData.error || `HTTP ${response.status}: ${response.statusText}`)
       }
       
       return response.json()
     },
     onSuccess: () => {
       // Обновляем кеш после успешного создания/обновления
-      // Используем setQueryData вместо invalidateQueries для избежания бесконечного цикла
       if (telegramUser?.telegramId) {
         queryClient.setQueryData(['user', telegramUser.telegramId], (oldData: any) => ({
           ...oldData,
           updatedAt: new Date().toISOString()
         }))
       }
+      // Сбрасываем счетчик ошибок при успехе
+      errorCountRef.current = 0
     },
+    onError: (error) => {
+      console.error('Error creating/updating user:', error)
+      errorCountRef.current++
+      
+      // Если слишком много ошибок, не пытаемся больше
+      if (errorCountRef.current >= maxRetries) {
+        console.warn('Max retries reached, stopping attempts to create user')
+        hasAttemptedCreate.current = true
+      } else {
+        // Сбрасываем флаг при ошибке, чтобы можно было попробовать снова
+        hasAttemptedCreate.current = false
+      }
+    }
   })
 
   // Автоматически создаем/обновляем пользователя при получении данных из Telegram
   useEffect(() => {
-    if (telegramUser && !user && !isLoading && !createOrUpdateUser.isPending) {
-      createOrUpdateUser.mutate(telegramUser)
+    if (telegramUser && !user && !isLoading && !createOrUpdateUser.isPending && !hasAttemptedCreate.current && errorCountRef.current < maxRetries) {
+      // Добавляем небольшую задержку для предотвращения слишком частых запросов
+      createTimeoutRef.current = setTimeout(() => {
+        hasAttemptedCreate.current = true
+        createOrUpdateUser.mutate(telegramUser)
+      }, 1000) // Увеличиваем задержку до 1 секунды
     }
-  }, [telegramUser, user, isLoading, createOrUpdateUser.isPending, createOrUpdateUser.mutate])
+  }, [telegramUser, user, isLoading, createOrUpdateUser.isPending])
 
   // Проверяем, имеет ли пользователь доступ к профилю (админ)
   const hasProfileAccess = telegramUser?.telegramId === '1171820656'

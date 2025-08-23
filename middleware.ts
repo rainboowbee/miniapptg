@@ -13,9 +13,33 @@ export function middleware(request: NextRequest) {
     return response
   }
 
+  // Логируем только API запросы
+  if (request.nextUrl.pathname.startsWith('/api/')) {
+    console.log(`[${new Date().toISOString()}] ${request.method} ${request.nextUrl.pathname}`)
+    
+    // Логируем заголовки для отладки
+    const userAgent = request.headers.get('user-agent')
+    const referer = request.headers.get('referer')
+    
+    if (userAgent) {
+      console.log(`User-Agent: ${userAgent}`)
+    }
+    if (referer) {
+      console.log(`Referer: ${referer}`)
+    }
+  }
+
   return NextResponse.next()
 }
 
 export const config = {
-  matcher: '/api/tonconnect-manifest/:path*',
+  matcher: [
+    /*
+     * Match all request paths except for the ones starting with:
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     */
+    '/((?!_next/static|_next/image|favicon.ico).*)',
+  ],
 }
