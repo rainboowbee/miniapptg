@@ -27,6 +27,14 @@ export default function RootLayout({
       <head>
         {/* Telegram Web App Script */}
         <script src="https://telegram.org/js/telegram-web-app.js" />
+        
+        {/* Google Fonts - Doto */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link 
+          href="https://fonts.googleapis.com/css2?family=Doto:wght@100..900&display=swap" 
+          rel="stylesheet" 
+        />
       </head>
       <body className={inter.className}>
         <Providers>

@@ -9,6 +9,7 @@ module.exports = {
     extend: {
       fontFamily: {
         'doto': ['Doto', 'system-ui', 'sans-serif'],
+        'sans': ['Doto', 'system-ui', 'sans-serif'], // Устанавливаем Doto как шрифт по умолчанию
       },
       colors: {
         telegram: {
