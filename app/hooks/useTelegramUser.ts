@@ -31,19 +31,117 @@ export function useTelegramUser() {
   useEffect(() => {
     const initTelegram = () => {
       try {
+        console.log('Initializing Telegram WebApp...')
+        console.log('Window object:', typeof window !== 'undefined' ? 'available' : 'not available')
+        console.log('User agent:', typeof window !== 'undefined' ? window.navigator.userAgent : 'N/A')
+        
         // Проверяем, запущено ли приложение в Telegram
-        if (typeof window !== 'undefined' && 'Telegram' in window && 'WebApp' in (window as any).Telegram) {
-          const webApp = (window as any).Telegram.WebApp
+        if (typeof window !== 'undefined') {
+          // Проверяем различные способы доступа к Telegram Web App
+          const telegram = (window as any).Telegram
+          console.log('Telegram object:', telegram)
+          console.log('Telegram.WebApp:', telegram?.WebApp)
+          console.log('Telegram.webapp:', telegram?.webapp)
           
-          // Инициализируем Web App
-          webApp.ready()
-          webApp.expand()
+          const webApp = telegram?.WebApp || telegram?.webapp
           
-          // Получаем данные пользователя
-          const userData = webApp.initDataUnsafe?.user
-          if (userData) {
-            setTelegramUser(userData)
-            console.log('Telegram user data:', userData)
+          if (webApp) {
+            console.log('Telegram WebApp found:', webApp)
+            
+            // Инициализируем Web App
+            if (typeof webApp.ready === 'function') {
+              webApp.ready()
+            }
+            if (typeof webApp.expand === 'function') {
+              webApp.expand()
+            }
+            
+            // Получаем данные пользователя различными способами
+            let userData = null
+            
+            // Способ 1: через initDataUnsafe.user
+            if (webApp.initDataUnsafe?.user) {
+              userData = webApp.initDataUnsafe.user
+              console.log('User data from initDataUnsafe:', userData)
+            }
+            // Способ 2: через initData (если есть)
+            else if (webApp.initData) {
+              try {
+                const initData = new URLSearchParams(webApp.initData)
+                const userParam = initData.get('user')
+                if (userParam) {
+                  userData = JSON.parse(decodeURIComponent(userParam))
+                  console.log('User data from initData:', userData)
+                }
+              } catch (e) {
+                console.log('Could not parse initData:', e)
+              }
+            }
+            // Способ 3: через window.Telegram.WebApp.initDataUnsafe.user
+            else if ((window as any).Telegram?.WebApp?.initDataUnsafe?.user) {
+              userData = (window as any).Telegram.WebApp.initDataUnsafe.user
+              console.log('User data from window.Telegram.WebApp:', userData)
+            }
+            
+            if (userData) {
+              setTelegramUser(userData)
+              console.log('Telegram user data set:', userData)
+            } else {
+              console.log('No user data found, but WebApp is available')
+              // Даже если нет данных пользователя, но WebApp доступен, считаем что мы в Telegram
+              setTelegramUser({
+                id: 0,
+                first_name: 'Telegram User',
+                last_name: '',
+                username: '',
+                photo_url: ''
+              })
+            }
+          } else {
+            // Проверяем URL параметры на наличие Telegram данных
+            const urlParams = new URLSearchParams(window.location.search)
+            const tgWebAppData = urlParams.get('tgWebAppData')
+            const userParam = urlParams.get('user')
+            
+            // Также проверяем hash и полный URL
+            const currentUrl = window.location.href
+            const hasTelegramParams = currentUrl.includes('tgWebAppData') || 
+                                    currentUrl.includes('tgWebApp') || 
+                                    currentUrl.includes('telegram') ||
+                                    tgWebAppData || 
+                                    userParam
+            
+            console.log('Current URL:', currentUrl)
+            console.log('URL params:', { tgWebAppData, userParam })
+            console.log('Has Telegram params:', hasTelegramParams)
+            
+            if (hasTelegramParams) {
+              console.log('Telegram data found in URL')
+              // Если есть параметры Telegram в URL, считаем что мы в Telegram
+              setTelegramUser({
+                id: 0,
+                first_name: 'Telegram User',
+                last_name: '',
+                username: '',
+                photo_url: ''
+              })
+            } else {
+              console.log('Telegram WebApp not found and no URL params')
+              
+              // В режиме разработки создаем тестового пользователя
+              if (process.env.NODE_ENV === 'development') {
+                console.log('Development mode: creating test user')
+                setTelegramUser({
+                  id: 123456789,
+                  first_name: 'Test User',
+                  last_name: 'Development',
+                  username: 'testuser',
+                  photo_url: ''
+                })
+              } else {
+                setError('Telegram WebApp not available')
+              }
+            }
           }
         }
       } catch (err) {
@@ -54,7 +152,9 @@ export function useTelegramUser() {
       }
     }
 
-    initTelegram()
+    // Добавляем небольшую задержку для инициализации
+    const timer = setTimeout(initTelegram, 100)
+    return () => clearTimeout(timer)
   }, [])
 
   // Сохранение пользователя в БД
