@@ -16,7 +16,7 @@ export default function TermsPage() {
   return (
     <div className="min-h-screen relative stars-bg p-4">
       <div className="max-w-4xl mx-auto pt-8 relative z-20">
-        <h1 className="text-3xl font-bold text-white mb-8 animate-fade-in font-doto">
+        <h1 className="text-3xl font-bold text-white mb-8 animate-fade-in">
           Условия использования
         </h1>
         

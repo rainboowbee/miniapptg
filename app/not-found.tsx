@@ -23,21 +23,21 @@ export default function NotFound() {
           </svg>
         </div>
         
-        <h1 className="text-4xl font-bold text-white mb-4 animate-fade-in font-doto">
+        <h1 className="text-4xl font-bold text-white mb-4 animate-fade-in">
           404
         </h1>
         
-        <h2 className="text-2xl font-semibold text-white mb-4 animate-fade-in font-doto" style={{ animationDelay: '0.1s' }}>
+        <h2 className="text-2xl font-semibold text-white mb-4 animate-fade-in" style={{ animationDelay: '0.1s' }}>
           Страница не найдена
         </h2>
         
-        <p className="text-gray-300 mb-8 animate-fade-in font-doto" style={{ animationDelay: '0.2s' }}>
+        <p className="text-gray-300 mb-8 animate-fade-in" style={{ animationDelay: '0.2s' }}>
           Запрашиваемая страница не существует или была перемещена.
         </p>
         
         <Link 
           href="/"
-          className="inline-block px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold rounded-lg hover:from-purple-600 hover:to-pink-600 transition-all duration-300 transform hover:scale-105 animate-fade-in font-doto"
+          className="inline-block px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold rounded-lg hover:from-purple-600 hover:to-pink-600 transition-all duration-300 transform hover:scale-105 animate-fade-in"
           style={{ animationDelay: '0.3s' }}
         >
           Вернуться на главную

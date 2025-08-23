@@ -51,11 +51,10 @@ export function ComingSoon() {
 
       {/* Описание */}
       <div className="text-center mb-12 relative z-20 max-w-2xl mx-auto px-4">
-        <p className="text-lg text-gray-400 animate-fade-in font-doto" style={{ animationDelay: '0.2s' }}>
+        <p className="text-lg text-gray-400 animate-fade-in" style={{ animationDelay: '0.2s' }}>
           Coming soon...
         </p>
       </div>
-
     </div>
   )
 }

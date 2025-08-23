@@ -25,7 +25,43 @@
   }
   
   body {
-    @apply bg-black text-white overflow-x-hidden font-doto;
+    @apply bg-black text-white overflow-x-hidden;
+    font-family: var(--font-doto);
+  }
+  
+  /* Применяем шрифт Doto ко всем элементам по умолчанию */
+  * {
+    font-family: var(--font-doto);
+  }
+  
+  /* Применяем шрифт к заголовкам */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-doto);
+  }
+  
+  /* Применяем шрифт к параграфам */
+  p {
+    font-family: var(--font-doto);
+  }
+  
+  /* Применяем шрифт к кнопкам */
+  button {
+    font-family: var(--font-doto);
+  }
+  
+  /* Применяем шрифт к input полям */
+  input, textarea, select {
+    font-family: var(--font-doto);
+  }
+  
+  /* Применяем шрифт к ссылкам */
+  a {
+    font-family: var(--font-doto);
+  }
+  
+  /* Применяем шрифт к span и div */
+  span, div {
+    font-family: var(--font-doto);
   }
 }
 
