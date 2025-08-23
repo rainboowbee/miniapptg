@@ -1,17 +1,32 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Lottie from 'lottie-react'
-import animationData from '@/src/assets/AnimatedSticker.json'
+
+// Динамический импорт анимации с fallback
+let animationData: any = null
 
 export function ComingSoon() {
   const [animationError, setAnimationError] = useState(false)
+  const [isAnimationLoaded, setIsAnimationLoaded] = useState(false)
+
+  useEffect(() => {
+    // Динамически загружаем анимацию
+    import('@/src/assets/AnimatedSticker.json')
+      .then((data) => {
+        animationData = data.default
+        setIsAnimationLoaded(true)
+      })
+      .catch(() => {
+        setAnimationError(true)
+      })
+  }, [])
 
   return (
     <div className="min-h-screen relative stars-bg flex flex-col items-center justify-center">
       {/* Стикер по центру */}
       <div className="mb-8">
-        {!animationError ? (
+        {!animationError && isAnimationLoaded && animationData ? (
           <Lottie 
             animationData={animationData} 
             loop={true} 

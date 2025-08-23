@@ -2,7 +2,6 @@
 
 import { useTelegramUser } from '@/app/hooks/useTelegramUser'
 
-import { UserProfile } from './UserProfile'
 import { ComingSoon } from './ComingSoon'
 import { AdminPanel } from './AdminPanel'
 

@@ -31,7 +31,7 @@ export function useTelegramUser() {
   
   // Инициализируем TON кошелек только на клиенте
   const tonWallet = typeof window !== 'undefined' ? useTonWallet() : null
-  const { account: walletAccount, isConnected: isWalletConnected, balance } = tonWallet || {}
+  const { account: walletAccount, isConnected: isWalletConnected, balance } = tonWallet || { account: null, isConnected: false, balance: null }
 
   // Инициализируем Telegram Web App при загрузке
   useEffect(() => {
@@ -103,7 +103,7 @@ export function useTelegramUser() {
     if (telegramUser && !user && !isLoading && !createOrUpdateUser.isPending) {
       createOrUpdateUser.mutate(telegramUser)
     }
-  }, [telegramUser, user, isLoading, createOrUpdateUser.isPending])
+  }, [telegramUser, user, isLoading, createOrUpdateUser.isPending, createOrUpdateUser.mutate])
 
   // Проверяем, имеет ли пользователь доступ к профилю (админ)
   const hasProfileAccess = telegramUser?.telegramId === '1171820656'

@@ -64,6 +64,8 @@ export async function POST(request: NextRequest) {
         firstName,
         lastName,
         avatar,
+        createdAt: new Date(),
+        updatedAt: new Date(),
       },
     })
 

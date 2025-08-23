@@ -47,7 +47,7 @@ export function AdminProfile() {
                     alt="Admin Avatar"
                     width={128}
                     height={128}
-                    className="rounded-full border-4 border-pink-400 shadow-lg"
+                    className="rounded-full border-4 border-pink-400 shadow-lg object-cover"
                   />
                 ) : (
                   <div className="w-32 h-32 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center border-4 border-pink-400 shadow-lg">

@@ -90,15 +90,15 @@ export function UserProfile() {
           {/* Аватар */}
           <div className="telegram-gradient p-6 text-center">
             <div className="relative w-24 h-24 mx-auto mb-4">
-              {user.avatar ? (
-                <Image
-                  src={user.avatar}
-                  alt="Avatar"
-                  width={96}
-                  height={96}
-                  className="rounded-full border-4 border-white shadow-lg"
-                />
-              ) : (
+                              {user.avatar ? (
+                  <Image
+                    src={user.avatar}
+                    alt="Avatar"
+                    width={96}
+                    height={96}
+                    className="rounded-full border-4 border-white shadow-lg object-cover"
+                  />
+                ) : (
                 <div className="w-24 h-24 bg-white/20 rounded-full flex items-center justify-center border-4 border-white shadow-lg">
                   <svg className="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
